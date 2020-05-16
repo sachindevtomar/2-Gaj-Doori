@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "251232974957",
+    "firebase_url": "https://dogajdoori.firebaseio.com",
+    "project_id": "dogajdoori",
+    "storage_bucket": "dogajdoori.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:251232974957:android:850884a01cb09250faa764",
+        "android_client_info": {
+          "package_name": "com.queue20.dogajdoori"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "251232974957-e2jt6moi95gv5fhpqrrni7cd4lp9gjkn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBisay31-BcmdRWwTgnm1sOPkEyw2k5x6k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "251232974957-e2jt6moi95gv5fhpqrrni7cd4lp9gjkn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
