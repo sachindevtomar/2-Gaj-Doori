@@ -1,7 +1,8 @@
 package com.queue20.dogajdoori.FeaturedClasses;
 
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.zxing.Result;
 import com.queue20.dogajdoori.Fragments.Page1Fragment;

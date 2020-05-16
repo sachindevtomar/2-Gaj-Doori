@@ -34,5 +34,13 @@
                 android:textStyle="bold" />
         </LinearLayout>
 
+        <Button
+            android:id="@+id/button_log_out"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:text="Log Out"
+            android:layout_gravity="center"
+            />
     </LinearLayout>
 </FrameLayout>

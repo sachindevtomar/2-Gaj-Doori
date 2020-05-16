@@ -7,9 +7,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,21 +14,28 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+
+import com.google.firebase.auth.FirebaseAuth;
 import com.queue20.dogajdoori.FeaturedClasses.ScannedBarcodeActivity;
+import com.queue20.dogajdoori.MainActivity;
 import com.queue20.dogajdoori.R;
 
 
 /* Fragment used as page 1 */
 public class Page1Fragment extends Fragment {
-    Button btnScanBarcode;
+    Button btnScanBarcode, btnLogOut;
     public static TextView resultQRTextView;
     private static final int PERMISSION_REQUEST_CODE = 200;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_page1, container, false);
-        btnScanBarcode = (Button) rootView.findViewById(R.id.btn_scan_qr_code);
-        resultQRTextView = (TextView) rootView.findViewById(R.id.text_qr_response);
+        btnScanBarcode = rootView.findViewById(R.id.btn_scan_qr_code);
+        btnLogOut = rootView.findViewById(R.id.button_log_out);
+        resultQRTextView = rootView.findViewById(R.id.text_qr_response);
 
         btnScanBarcode.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -43,16 +47,24 @@ public class Page1Fragment extends Fragment {
                 }
             }
         });
+
+        btnLogOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirebaseAuth.getInstance().signOut();
+
+                Intent intent = new Intent(getActivity(), MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+                startActivity(intent);
+            }
+        });
         return rootView;
     }
 
     private boolean checkPermission() {
-        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA)
-                != PackageManager.PERMISSION_GRANTED) {
-            // Permission is not granted
-            return false;
-        }
-        return true;
+        // Permission is not granted
+        return ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED;
     }
 
     private void requestPermission() {
@@ -63,7 +75,7 @@ public class Page1Fragment extends Fragment {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {
             case PERMISSION_REQUEST_CODE:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {

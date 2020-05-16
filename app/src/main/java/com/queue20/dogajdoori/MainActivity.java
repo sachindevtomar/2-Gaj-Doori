@@ -1,83 +1,63 @@
 package com.queue20.dogajdoori;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
 
-import com.queue20.dogajdoori.Fragments.Page1Fragment;
-import com.queue20.dogajdoori.Fragments.Page2Fragment;
-import com.queue20.dogajdoori.Fragments.Page3Fragment;
+import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.queue20.dogajdoori.Shared.CountryData;
 
 public class MainActivity extends AppCompatActivity {
 
-    private final String LOG_TAG = MainActivity.class.getSimpleName();
-
-    // Titles of the individual pages (displayed in tabs)
-    private final String[] PAGE_TITLES = new String[] {
-            "Page 1",
-            "Page 2",
-            "Page 3"
-    };
-
-    // The fragments that are used as the individual pages
-    private final Fragment[] PAGES = new Fragment[] {
-            new Page1Fragment(),
-            new Page2Fragment(),
-            new Page3Fragment()
-    };
-
-    // The ViewPager is responsible for sliding pages (fragments) in and out upon user input
-    private ViewPager mViewPager;
-
+    private EditText editTextPhoneNumber;
+    private Spinner spinner;
+    private Button btnSendOtp;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Set the Toolbar as the activity's app bar (instead of the default ActionBar)
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        spinner = findViewById(R.id.spinner_country_code);
+        spinner.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, CountryData.countryNames));
 
-        // Connect the ViewPager to our custom PagerAdapter. The PagerAdapter supplies the pages
-        // (fragments) to the ViewPager, which the ViewPager needs to display.
-        mViewPager = (ViewPager) findViewById(R.id.viewpager);
-        mViewPager.setAdapter(new MyPagerAdapter(getSupportFragmentManager()));
+        editTextPhoneNumber = findViewById(R.id.editText_phone_number);
+        btnSendOtp = findViewById(R.id.button_send_otp);
 
-        // Connect the tabs with the ViewPager (the setupWithViewPager method does this for us in
-        // both directions, i.e. when a new tab is selected, the ViewPager switches to this page,
-        // and when the ViewPager switches to a new page, the corresponding tab is selected)
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
-        tabLayout.setupWithViewPager(mViewPager);
+        btnSendOtp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String code = CountryData.countryAreaCodes[spinner.getSelectedItemPosition()];
+                String phoneNumber = editTextPhoneNumber.getText().toString().trim();
+
+                if(phoneNumber.isEmpty() || phoneNumber.length() < 10){
+                    editTextPhoneNumber.setError("Valid number is required");
+                    editTextPhoneNumber.requestFocus();
+                    return;
+                }
+
+                String phoneNumberModified = "+" + code + phoneNumber;
+
+                Intent intent = new Intent(MainActivity.this, VerifyPhoneActivity.class);
+                intent.putExtra("phoneNumber", phoneNumberModified);
+                startActivity(intent);
+            }
+        });
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
 
-    /* PagerAdapter for supplying the ViewPager with the pages (fragments) to display. */
-    public class MyPagerAdapter extends FragmentPagerAdapter {
-
-        public MyPagerAdapter(FragmentManager fragmentManager) {
-            super(fragmentManager);
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+            Intent intent = new Intent(this, HomeActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
         }
-
-        @Override
-        public Fragment getItem(int position) {
-            return PAGES[position];
-        }
-
-        @Override
-        public int getCount() {
-            return PAGES.length;
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return PAGE_TITLES[position];
-        }
-
     }
 }
