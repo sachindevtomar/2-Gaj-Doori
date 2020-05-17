@@ -37,6 +37,14 @@ public class Page1Fragment extends Fragment {
         btnLogOut = rootView.findViewById(R.id.button_log_out);
         resultQRTextView = rootView.findViewById(R.id.text_qr_response);
 
+        String qrCodeResult = getActivity().getIntent().getStringExtra("qrResult");
+        if(qrCodeResult != null  && qrCodeResult != ""){
+            resultQRTextView.setText(qrCodeResult);
+        }
+        else{
+            resultQRTextView.setText("Please Scan QR Code" + FirebaseAuth.getInstance().getCurrentUser().getUid());
+        }
+
         btnScanBarcode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -55,7 +63,6 @@ public class Page1Fragment extends Fragment {
 
                 Intent intent = new Intent(getActivity(), MainActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-
                 startActivity(intent);
             }
         });
