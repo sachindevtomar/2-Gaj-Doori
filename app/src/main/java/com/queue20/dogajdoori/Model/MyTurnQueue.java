@@ -7,7 +7,7 @@ public class MyTurnQueue {
 
     public String UserId;
     public String StoreName;
-    public int MyTurnNumber;
+    public long MyTurnNumber;
     public String CreatedDate;
     public String Status;
 
@@ -16,7 +16,7 @@ public class MyTurnQueue {
         // Default constructor required for calls to DataSnapshot.getValue(User.class)
     }
 
-    public MyTurnQueue(String UserId, String StoreName, int MyTurnNumber) {
+    public MyTurnQueue(String UserId, String StoreName, long MyTurnNumber) {
         this.UserId = UserId;
         this.StoreName = StoreName;
         this.MyTurnNumber = MyTurnNumber;
